@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <title>新聞話題分析</title>
+        <meta name="description" content="An interactive getting started guide for Brackets.">
+		<style type="text/css">
+		.clundbox {
+			display: inline-block;
+			margin: 10px;
+		}
+		</style>
+    </head>
+    
+    <body>
+		<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+
+        <div><h1>台灣12大藍綠政黨愛好者粉絲頁話題分析 你想看哪一個?</h1></div>
+		<p><p>
+		更新時間:<span id="updata_time"></span>
+		<p>
+		<h2 style="color:blue;">藍軍愛好者</h2><br>
+		<div id="blue_clound"></div>
+		<p><p>
+		<h2 style="color:green;">綠軍愛好者</h2><br>
+		<div id="green_clound"></div>
+    </body>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '940512152627858',
+                xfbml      : true,
+                version    : 'v3.0'
+            });
+            FB.AppEvents.logPageView();
+        };
+		
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+		
+		$(document).ready(function(){
+			$.getJSON('https://spreadsheets.google.com/feeds/list/1qzk7pAbxQWb8Q7qpI4bd6eOF3iTjMFWYu2wdqGnyOnQ/od6/public/values?alt=json', function (data){
+				$("#updata_time").append(data.feed.entry[0].gsx$updatetime.$t);
+				for (var i=0; i < 6; i++){
+					var fanspage = data.feed.entry[i].gsx$fanspage.$t;
+					var fansmessage = data.feed.entry[i].gsx$fansmessage.$t;
+					$("#blue_clound").append('<div class="clundbox">'+fanspage+'<br /><iframe src="https://wordcloud.timdream.org/#base64:'+fansmessage+'" width="450px" height="350px"></iframe></div>');
+				}
+				for (var i=6; i < 12; i++){
+					var fanspage = data.feed.entry[i].gsx$fanspage.$t;
+					var fansmessage = data.feed.entry[i].gsx$fansmessage.$t;
+					$("#green_clound").append('<div class="clundbox">'+fanspage+'<br /><iframe src="https://wordcloud.timdream.org/#base64:'+fansmessage+'" width="450px" height="350px"></iframe></div>');
+				}
+			  });
+		  });  
+    </script>
+</html>

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <title>政黨愛好者最新話題分析</title>
+        <title>粉絲頁話題分析與比較</title>
         <meta name="description" content="An interactive getting started guide for Brackets.">
 		<style type="text/css">
 		.clundbox {
@@ -17,15 +17,28 @@
     <body>
 		<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
 
-        <div><h1>台灣12大藍綠政黨愛好者粉絲頁最新話題分析 你想看哪一個?</h1></div>
-		<p><p>
-		更新時間:<span id="updata_time"></span>
+        <h1>粉絲頁話題分析與比較</h1>
+		選單輸入 
+		<select id="fbid_select" onchange="genernate_select()">
+			<option value="851884711574981">藍色力量</option>
+			<option value="1566024720346478">反蔡英文聯盟－全國民怨嗆蔡總部</option>
+			<option value="1067024713417898">反民進黨粉絲團</option>
+			<option value="1100522356652838">藍色正義力量</option>
+			<option value="1005354439549606">民間大小事</option>
+			<option value="1006889099430655">青天白日正義力量</option>
+			<option value="513973141992436">不禮貌鄉民團</option>
+			<option value="903187446394890">黑框作業</option>
+			<option value="449884271786386">肯腦濕的人生相談室</option>
+			<option value="1603704569879154">老丹</option>
+			<option value="514276415375840">靠北KMT</option>
+			<option value="245311342852891">只是堵藍</option>
+		</select>
+		<br><br>
+		自己輸入粉絲頁ID 
+		<input type="text" id="fbid_text">
+		<input type="button" value="產生" onclick="genernate_text()">
 		<p>
-		<h2 style="color:blue;">藍軍愛好者</h2><br>
-		<div id="blue_clound"></div>
-		<p><p>
-		<h2 style="color:green;">綠軍愛好者</h2><br>
-		<div id="green_clound"></div>
+		<div id="genernate_clound"></div>
     </body>
     <script>
         window.fbAsyncInit = function() {
@@ -44,21 +57,26 @@
             js.src = "https://connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
-		
-		$(document).ready(function(){
-			$.getJSON('https://spreadsheets.google.com/feeds/list/1qzk7pAbxQWb8Q7qpI4bd6eOF3iTjMFWYu2wdqGnyOnQ/od6/public/values?alt=json', function (data){
-				$("#updata_time").append(data.feed.entry[0].gsx$updatetime.$t);
-				for (var i=0; i < 6; i++){
-					var fanspage = data.feed.entry[i].gsx$fanspage.$t;
-					var fansmessage = data.feed.entry[i].gsx$fansmessage.$t;
-					$("#blue_clound").append('<div class="clundbox">'+fanspage+'<br /><iframe src="https://wordcloud.timdream.org/#base64:'+fansmessage+'" width="450px" height="350px"></iframe></div>');
-				}
-				for (var i=6; i < 12; i++){
-					var fanspage = data.feed.entry[i].gsx$fanspage.$t;
-					var fansmessage = data.feed.entry[i].gsx$fansmessage.$t;
-					$("#green_clound").append('<div class="clundbox">'+fanspage+'<br /><iframe src="https://wordcloud.timdream.org/#base64:'+fansmessage+'" width="450px" height="350px"></iframe></div>');
-				}
-			  });
-		  });  
+		  
+		  function genernate_select(){
+			$('#fbid_text').val($('#fbid_select').val());
+		  }
+		  
+		  function genernate_text(){
+			var fbid = $('#fbid_text').val();
+			if(fbid.match(/\d+/)){
+				genernate(fbid);
+			}else{
+				alert('請輸入數字');
+			}
+		  }
+		  
+		  function genernate(fbid){
+			var url = 'https://www.facebook.com/' + fbid;
+			$.getJSON('https://script.google.com/macros/s/AKfycbxEpi7DOIBicmhz_NcIc7lhWA-G2WnTTOW78ng23H8AdQ2aj2PV/exec?fbid=' + fbid, function (data){
+				$("#genernate_clound").append('<div class="clundbox"><a href="'+url+'">'+data.name+'</a><br />' +
+				'<iframe src="https://wordcloud.timdream.org/#base64:'+data.value+'" width="700px" height="550px"></iframe></div>');
+			 });
+		  }
     </script>
 </html>

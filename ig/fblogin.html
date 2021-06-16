@@ -21,7 +21,7 @@
 	if (response.status === 'connected') {
 		FB.api('/me?fields=name,email', function(response) { 
 	        //將使用者資訊傳回服務端
-	        window.location.href="https://www.eland.com.tw/token="+JSON.stringify(response);
+	        window.location.href="https://www.opview.com.tw/token="+JSON.stringify(response);
 	        document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
 	    });
 	}else{

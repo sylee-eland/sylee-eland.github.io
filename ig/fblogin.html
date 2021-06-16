@@ -19,28 +19,14 @@
 	var accessToken=response.authResponse.accessToken;
 	console.log(response.authResponse.accessToken);
 	if (response.status === 'connected') {
-	FB.api('/me?fields=name,email', function(response) { 
-	        	//將使用者資訊傳回服務端
-	        	window.location.href="https://www.eland.com.tw/token="+JSON.stringify(response);
-	        	/* $.ajax({
-	                    url:"http://gntina.iok.la/userInfo",
-	                    data:{
-	                    	userInfo:JSON.stringify(response)
-	                    },
-	                    dataType:"json",
-	                    async:false,
-	                    success:function(data){
-	                    	window.location.href="";
-	                    } 
-	                }); */
-	        	document.getElementById('status').innerHTML =
-			        'Thanks for logging in, ' + response.name + '!';
-	        });
-	        
-		} else {
-			document.getElementById('status').innerHTML = 'Please log '
-					+ 'into this app.';
-		}
+		FB.api('/me?fields=name,email', function(response) { 
+	        //將使用者資訊傳回服務端
+	        window.location.href="https://www.eland.com.tw/token="+JSON.stringify(response);
+	        document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
+	    });
+	}else{
+		document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
+	}
   }
 
 
